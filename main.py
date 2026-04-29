@@ -51,3 +51,36 @@ viz.DRIVE_BASE = DRIVE_BASE
 # ─────────────────────────────────────────────────────────────────────────────
 dp.setup_directories(DRIVE_BASE)
 
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 1 — Load YOLO model
+# ─────────────────────────────────────────────────────────────────────────────
+print("⏳ Loading YOLOv8n model...")
+yolo_model = YOLO("yolov8n.pt")   # downloads automatically on first run
+print("✅ YOLOv8n loaded.")
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 2 — Scan uploaded videos (place files in dataset/uploaded/ first)
+# ─────────────────────────────────────────────────────────────────────────────
+dp.scan_uploaded_videos(DRIVE_BASE)
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 3 — Assign videos to train / val / test splits
+#  Edit dp.VIDEO_SPLITS to change assignments.
+# ─────────────────────────────────────────────────────────────────────────────
+SPLIT_VIDEOS = dp.assign_splits(
+    video_splits        = dp.VIDEO_SPLITS,
+    video_moving_camera = dp.VIDEO_MOVING_CAMERA,
+    drive_base          = DRIVE_BASE,
+)
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 4c — Auto-generate YOLO ground-truth annotations
+#  Edit dp.VIDEO_CLASS_FILTER to control which COCO classes are kept per video.
+# ─────────────────────────────────────────────────────────────────────────────
+dp.run_yolo_annotation_pipeline(
+    split_videos        = SPLIT_VIDEOS,
+    yolo_model          = yolo_model,
+    video_class_filter  = dp.VIDEO_CLASS_FILTER,
+    drive_base          = DRIVE_BASE,
+)
+

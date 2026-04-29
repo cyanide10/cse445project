@@ -133,3 +133,41 @@ test_metrics, avg = exp.run_test(
     video_class_filter  = dp.VIDEO_CLASS_FILTER,
 )
 
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 9 — Results dashboard
+# ─────────────────────────────────────────────────────────────────────────────
+combos = (
+    exp.make_combos(exp.PARAM_GRID_MOG2)
+    + exp.make_combos(exp.PARAM_GRID_GMG)
+    + exp.make_combos(exp.PARAM_GRID_YOLO)
+)
+
+viz.plot_dashboard(
+    train_results  = train_results,
+    val_results    = val_results,
+    test_metrics   = test_metrics,
+    avg            = avg,
+    best           = BEST,
+    best_train_f1  = best_train_f1,
+    drive_base     = DRIVE_BASE,
+)
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 10 — Summary report
+# ─────────────────────────────────────────────────────────────────────────────
+viz.print_summary(
+    split_videos   = SPLIT_VIDEOS,
+    combos         = combos,
+    best_train_f1  = best_train_f1,
+    best           = BEST,
+    best_params    = BEST_PARAMS,
+    avg            = avg,
+    test_metrics   = test_metrics,
+    random_seed    = RANDOM_SEED,
+    drive_base     = DRIVE_BASE,
+)
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 11 — Confirm output locations on Drive
+# ─────────────────────────────────────────────────────────────────────────────
+viz.print_outputs(DRIVE_BASE)

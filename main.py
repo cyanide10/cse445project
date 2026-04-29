@@ -84,3 +84,27 @@ dp.run_yolo_annotation_pipeline(
     drive_base          = DRIVE_BASE,
 )
 
+# Optional: copy manually prepared annotation CSVs from uploaded/
+# dp.copy_annotation_csvs(SPLIT_VIDEOS, DRIVE_BASE)
+
+# Optional: interactive frame labeler
+# dp.interactive_labeler("my_video.mp4", label_split="train", drive_base=DRIVE_BASE)
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 5 — Print video inventory
+# ─────────────────────────────────────────────────────────────────────────────
+dp.print_video_inventory(SPLIT_VIDEOS, DRIVE_BASE)
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 6 — Hyperparameter grid search (training)
+# ─────────────────────────────────────────────────────────────────────────────
+train_results, best_params, best_train_f1 = exp.run_grid_search(
+    split_videos        = SPLIT_VIDEOS,
+    yolo_model          = yolo_model,
+    drive_base          = DRIVE_BASE,
+    video_class_filter  = dp.VIDEO_CLASS_FILTER,
+)
+
+# To skip re-running and reload from Drive:
+# train_results, best_params, best_train_f1 = exp.load_train_results(DRIVE_BASE)
+

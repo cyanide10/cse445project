@@ -108,3 +108,28 @@ train_results, best_params, best_train_f1 = exp.run_grid_search(
 # To skip re-running and reload from Drive:
 # train_results, best_params, best_train_f1 = exp.load_train_results(DRIVE_BASE)
 
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 7 — Validation: select best configuration
+# ─────────────────────────────────────────────────────────────────────────────
+val_results, BEST_PARAMS, BEST = exp.run_validation(
+    train_results       = train_results,
+    best_params         = best_params,
+    best_train_f1       = best_train_f1,
+    split_videos        = SPLIT_VIDEOS,
+    yolo_model          = yolo_model,
+    top_k               = 5,
+    drive_base          = DRIVE_BASE,
+    video_class_filter  = dp.VIDEO_CLASS_FILTER,
+)
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 8 — Test: final evaluation on held-out videos
+# ─────────────────────────────────────────────────────────────────────────────
+test_metrics, avg = exp.run_test(
+    best_params         = BEST_PARAMS,
+    split_videos        = SPLIT_VIDEOS,
+    yolo_model          = yolo_model,
+    drive_base          = DRIVE_BASE,
+    video_class_filter  = dp.VIDEO_CLASS_FILTER,
+)
+

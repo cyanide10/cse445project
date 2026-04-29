@@ -36,3 +36,18 @@ np.random.seed(RANDOM_SEED)
 # ── Google Drive mount & project root ─────────────────────────────────────────
 drive.mount('/content/drive')
 DRIVE_BASE = "/content/drive/MyDrive/ML_Tracker"
+
+# Override the default DRIVE_BASE in each support module
+import support.data_pipeline  as dp
+import support.experiment      as exp
+import support.visualization   as viz
+
+dp.DRIVE_BASE  = DRIVE_BASE
+exp.DRIVE_BASE = DRIVE_BASE
+viz.DRIVE_BASE = DRIVE_BASE
+
+# ─────────────────────────────────────────────────────────────────────────────
+#  STEP 0 — Directory setup
+# ─────────────────────────────────────────────────────────────────────────────
+dp.setup_directories(DRIVE_BASE)
+
